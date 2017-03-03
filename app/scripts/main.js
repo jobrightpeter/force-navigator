@@ -133,6 +133,12 @@ var sfnav = (function() {
         setVisible('visible');
 
       }
+    else if(ins.substring(0,10) == 'show user ')
+      {
+        clearOutput();
+        addWord('Usage: show user <FirstName> <LastName> OR <Username>');
+        setVisible('visible');
+      }
     else if(ins.substring(0,3) == 'cf ' && ins.split(' ').length < 4)
       {
 
@@ -491,6 +497,11 @@ var sfnav = (function() {
         loginAs(cmd);
         return true;
       }
+    if(cmd.toLowerCase().substring(0,10) == 'show user ')
+      {
+        showUser(cmd);
+        return true;
+      }
 
     return false;
   }
@@ -723,6 +734,45 @@ var sfnav = (function() {
     );
   }
 
+  function showUser(cmd) {
+    var arrSplit = cmd.split(' ');
+    var searchValue = arrSplit[2];
+    if(arrSplit[3] !== undefined)
+      searchValue += '+' + arrSplit[3];
+
+    var query = 'SELECT+Id,+Name,+Username+FROM+User+WHERE+Name+LIKE+\'%25' + searchValue + '%25\'+OR+Username+LIKE+\'%25' + searchValue + '%25\'';
+    console.log(query);
+
+    ftClient.query(query,
+      function(success) {
+        console.log(success);
+        var numberOfUserRecords = success.records.length;
+        if(numberOfUserRecords < 1){
+          addError([{"message":"No user for your search exists."}]);
+        } else if(numberOfUserRecords > 1){
+          showUserShowOptions(success.records);
+        } else {
+          var userId = success.records[0].Id;
+          showUserPerform(userId);
+        }
+      },
+      function(error)
+      {
+        console.log(error);
+        addError(error.responseJSON);
+      }
+    );
+  }
+
+  function showUserShowOptions(records){
+    for(var i = 0; i < records.length; ++i){
+      var cmd = 'Show User ' + records[i].Name;
+      cmds[cmd] = {key: cmd, id: records[i].Id};
+      addWord(cmd);
+    }
+    setVisible('visible');
+  }
+
   function loginAsShowOptions(records){
     for(var i = 0; i < records.length; ++i){
       var cmd = 'Login As ' + records[i].Name;
@@ -745,6 +795,10 @@ var sfnav = (function() {
     }
     xmlhttp.open("GET", userDetailPage(userId), true);
     xmlhttp.send();
+  }
+
+  function showUserPerform(userId) {
+    window.location.href = userDetailPage(userId);
   }
 
   function userDetailPage(userId) {
