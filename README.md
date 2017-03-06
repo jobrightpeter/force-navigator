@@ -8,10 +8,6 @@ This extension helps you get to any salesforce page quickly. Just type in what y
 
 - (beta) Thanks to the SF tooling API, you can now create fields. "cf Account newField TEXT 100."
 
-- Show User :
-Usage: show user <FirstName> <LastName> OR <Username>
-Partial values for FirstName, Lastname and Username accepted.
-
 Check it out on the Chrome Web Store:
 [Salesforce Navigator](https://chrome.google.com/webstore/detail/salesforce-navigator/ecjmdlggbilopfkkhggmgebbmbiklcdo)
 
