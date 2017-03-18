@@ -23,11 +23,6 @@ var sfnav = (function() {
   var SFAPI_VERSION = 'v33.0';
   var ftClient;
   var customObjects = {};
-  var apexClasses = {};
-  var triggers = {};
-  var profiles = {};
-  var pages = {};
-  var components = {};
   var META_DATATYPES = {
     "AUTONUMBER": {name:"AutoNumber",code:"auto", params:0},
     "CHECKBOX": {name:"Checkbox",code:"cb", params:0},
@@ -1118,7 +1113,6 @@ var sfnav = (function() {
     {
       for(var i=0;i<success.records.length;i++)
         {
-          apexClasses[success.records[i].Name.toLowerCase()] = {Id: success.records[i].Id};
           var apiName = (success.records[i].NamespacePrefix == null ? '' : success.records[i].NamespacePrefix + '__') + success.records[i].Name + '__c';
           cmds['Setup > Apex Class > ' + apiName] = {url: '/' + success.records[i].Id, key: apiName};
         }
@@ -1135,7 +1129,6 @@ var sfnav = (function() {
     {
       for(var i=0;i<success.records.length;i++)
         {
-          triggers[success.records[i].Name.toLowerCase()] = {Id: success.records[i].Id};
           var apiName = success.records[i].Name;
           cmds['Setup > Apex Trigger > ' + apiName] = {url: '/' + success.records[i].Id, key: apiName};
         }
@@ -1152,7 +1145,6 @@ var sfnav = (function() {
     {
       for(var i=0;i<success.records.length;i++)
         {
-          profiles[success.records[i].Name.toLowerCase()] = {Id: success.records[i].Id};
           var apiName = success.records[i].Name;
           cmds['Setup > Profile > ' + apiName] = {url: '/' + success.records[i].Id, key: apiName};
         }
@@ -1169,7 +1161,6 @@ var sfnav = (function() {
     {
       for(var i=0;i<success.records.length;i++)
         {
-          pages[success.records[i].Name.toLowerCase()] = {Id: success.records[i].Id};
           var apiName = success.records[i].Name;
           cmds['Setup > Visualforce page > ' + apiName] = {url: '/' + success.records[i].Id, key: apiName};
         }
@@ -1186,7 +1177,6 @@ var sfnav = (function() {
     {
       for(var i=0;i<success.records.length;i++)
         {
-          components[success.records[i].Name.toLowerCase()] = {Id: success.records[i].Id};
           var apiName = success.records[i].Name;
           cmds['Setup > Visualforce component > ' + apiName] = {url: '/' + success.records[i].Id, key: apiName};
         }
