@@ -883,7 +883,11 @@ var sfnav = (function() {
     getSetupTree();
     // getCustomObjects();
     getCustomObjectsDef();
-
+    getApexClassesDef();
+    getTriggersDef();
+    getProfilesDef();
+    getPagesDef();
+    getComponentsDef();
   }
 
   function parseSetupTree(html)
@@ -1142,20 +1146,100 @@ var sfnav = (function() {
   {
 
     ftClient.query('Select+Id,+DeveloperName,+NamespacePrefix+FROM+CustomObject',
-      function(success)
-      {
-        for(var i=0;i<success.records.length;i++)
-          {
-            customObjects[success.records[i].DeveloperName.toLowerCase()] = {Id: success.records[i].Id};
-            var apiName = (success.records[i].NamespacePrefix == null ? '' : success.records[i].NamespacePrefix + '__') + success.records[i].DeveloperName + '__c';
-            cmds['Setup > Custom Object > ' + apiName] = {url: '/' + success.records[i].Id, key: apiName};
-          }
-      },
-      function(error)
-      {
-        getCustomObjects();
-      });
+    function(success)
+    {
+      for(var i=0;i<success.records.length;i++)
+        {
+          customObjects[success.records[i].DeveloperName.toLowerCase()] = {Id: success.records[i].Id};
+          var apiName = (success.records[i].NamespacePrefix == null ? '' : success.records[i].NamespacePrefix + '__') + success.records[i].DeveloperName + '__c';
+          cmds['Setup > Custom Object > ' + apiName] = {url: '/' + success.records[i].Id, key: apiName};
+        }
+    },
+    function(error)
+    {
+      getCustomObjects();
+    });
 
+  }
+  function getApexClassesDef() {
+    ftClient.query('Select+Id,+Name,+NamespacePrefix+FROM+ApexClass',
+    function(success)
+    {
+      for(var i=0;i<success.records.length;i++)
+        {
+          var apiName = (success.records[i].NamespacePrefix == null ? '' : success.records[i].NamespacePrefix + '__') + success.records[i].Name + '__c';
+          cmds['Setup > Apex Class > ' + apiName] = {url: '/' + success.records[i].Id, key: apiName};
+        }
+    },
+    function(error)
+    {
+      console.log('error while querying apex classes');
+      console.log('error =>> ', error);
+    });    
+  }
+  function getTriggersDef() {
+    ftClient.query('Select+Id,+Name+FROM+ApexTrigger',
+    function(success)
+    {
+      for(var i=0;i<success.records.length;i++)
+        {
+          var apiName = success.records[i].Name;
+          cmds['Setup > Apex Trigger > ' + apiName] = {url: '/' + success.records[i].Id, key: apiName};
+        }
+    },
+    function(error)
+    {
+      console.log('error while querying apex triggers');
+      console.log('error =>> ', error);
+    });
+  }
+  function getProfilesDef() {
+    ftClient.query('Select+Id,+Name+FROM+Profile',
+    function(success)
+    {
+      for(var i=0;i<success.records.length;i++)
+        {
+          var apiName = success.records[i].Name;
+          cmds['Setup > Profile > ' + apiName] = {url: '/' + success.records[i].Id, key: apiName};
+        }
+    },
+    function(error)
+    {
+      console.log('error while querying profiles');
+      console.log('error =>> ', error);
+    });   
+  }
+  function getPagesDef() {
+    ftClient.query('Select+Id,+Name+FROM+ApexPage',
+    function(success)
+    {
+      for(var i=0;i<success.records.length;i++)
+        {
+          var apiName = success.records[i].Name;
+          cmds['Setup > Visualforce page > ' + apiName] = {url: '/' + success.records[i].Id, key: apiName};
+        }
+    },
+    function(error)
+    {
+      console.log('error while querying visualforce pages');
+      console.log('error =>> ', error);
+    });
+  }
+  function getComponentsDef() {
+    ftClient.query('Select+Id,+Name+FROM+ApexComponent',
+    function(success)
+    {
+      for(var i=0;i<success.records.length;i++)
+        {
+          var apiName = success.records[i].Name;
+          cmds['Setup > Visualforce component > ' + apiName] = {url: '/' + success.records[i].Id, key: apiName};
+        }
+    },
+    function(error)
+    {
+      console.log('error while querying visualforce components');
+      console.log('error =>> ', error);
+    });
   }
   function init()
   {
